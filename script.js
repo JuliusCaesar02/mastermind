@@ -1,6 +1,5 @@
-var possibleColors = ["red", "green", "black", "yellow", "white", "blue"];
-var selectedColor = "red";
-var selectedRow = 0;
+const possibleColors = ["red", "green", "black", "yellow", "white", "blue"];
+var selectedRow = 1;
 var secret = [];
 
 
@@ -9,23 +8,29 @@ window.addEventListener("load", (event) => {
     secret = generateSecret();
     paintSecret(secret);
     console.log(secret);
-    var combination = ["black", "red", "yellow", "blue"];
-    console.log(checkSecret(secret, combination));
 
-    document.getElementById("next").addEventListener("click", ((e)=>{
-        let colors = getPLayingRowColors(elements);
+    elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+    addListeners(elements);
+
+    document.getElementById("check").addEventListener("click", ((e)=>{
+        let colors = getPlayingRowColors(elements);
         console.log(colors);
-        console.log(checkSecret(secret, colors));
-        selectedRow++;
+        hints = checkSecret(secret, colors);
+        if(hints == [1, 1, 1, 1]){
+            console.log("You won");
+        }
+        else console.log(hints);
         removeListeners(elements);
+        paintHints(hints);
+        selectedRow++;
         elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
-        addListeners(elements, selectedColor);
+        addListeners(elements);
     }));
 });
 
 function addListeners(elements){
     elements.forEach(item => {
-        item.addEventListener("click", showColorMenu);
+        item.addEventListener("click", buttonClicked);
         item.addEventListener("mouseenter", showColorMenu);
         item.addEventListener("mouseleave", hideColorMenu);
     })
@@ -109,15 +114,25 @@ function generateSecret(){
 function checkSecret(secret, combination){
     console.log(secret);
     console.log(combination);
+    let partialCombination = [];
     let result = [];
-    console.log(secret.length);
-    console.log(combination.length);
+    let updatedSecret = [...secret];
     for(let i = 0; i < secret.length; i++){
-        for(let j = 0; j < secret.length; j++){
-            if(combination[j] == secret[i]){
-                if(i == j) result.push(0);
-                else result.push(1);
-            }
+        if(combination[i] == secret[i]){
+            partialCombination.push(null);
+            updatedSecret.splice(i, 1, "");
+            result.push(0);
+        }
+        else {
+            partialCombination.push(combination[i]);
+        }
+    }
+    console.log(partialCombination);
+
+    for(let i = 0; i < secret.length; i++){
+        if(updatedSecret.includes(partialCombination[i])){
+            updatedSecret.splice(updatedSecret.indexOf(partialCombination[i]));
+            result.push(1);
         }
     }
     console.log(result);
@@ -125,7 +140,7 @@ function checkSecret(secret, combination){
     return result;
 }
 
-function getPLayingRowColors(elements){
+function getPlayingRowColors(elements){
     let combination = [];
     elements.forEach(item => {
         combination.push(item.dataset.color);
@@ -138,6 +153,23 @@ function paintSecret(secret){
     let i = 0;
     elements.forEach(item => {
         item.dataset.color = secret[i];
+        i++;
+    });
+}
+
+function paintHints(hint){
+    elements = document.querySelectorAll("#check-grid > div:nth-child("+selectedRow+") > div");
+    let i = 0;
+    console.log(elements)
+    console.log(hint)
+    hint.forEach(item => {
+        console.log(item)
+        if(item == 0){
+            elements[i].dataset.hint = 0;
+        }
+        else if(item == 1){
+            elements[i].dataset.hint = 1;
+        }
         i++;
     });
 }
