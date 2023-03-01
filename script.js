@@ -41,19 +41,20 @@ function nextRow(){
     else {
         console.log(colors);
         hints = checkSecret(secret, colors);
-        if(hints.toString() == new Array(0, 0, 0, 0).toString()){
-            console.log("You won");
-        }
-        if(selectedRow == 2){
-            console.log("You lost");  
-        }
-        else console.log(hints);
         removeListeners(elements);
-        paintHints(hints);
-        selectedRow--;
-        elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
-        highlightsRow();
-        addListeners(elements);
+        paintHints(hints)
+        .then(()=>{
+            if(hints.toString() == new Array(0, 0, 0, 0).toString()){
+                console.log("You won");
+            }
+            if(selectedRow == 2){
+                console.log("You lost");  
+            }
+            selectedRow--;
+            elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+            highlightsRow();
+            addListeners(elements);
+        })
     }
 }
 
@@ -218,18 +219,23 @@ function paintSecret(secret){
 }
 
 function paintHints(hint){
-    elements = document.querySelectorAll("#check-grid > div:nth-child("+selectedRow+") > div");
-    let i = 0;
-    console.log(elements)
-    console.log(hint)
-    hint.forEach(item => {
-        console.log(item)
-        if(item == 0){
-            elements[i].dataset.hint = 0;
+    return new Promise(resolve => {
+        let hintElements = document.querySelectorAll("#check-grid > div:nth-child("+selectedRow+") > div");
+        let i = 0;
+        let defaultWait = 350;
+        let additionalTime = 300;
+        for(let j = 0; j < hint.length; j++){
+            setTimeout(()=>{
+                if(hint[j] == 0 || hint[j] == 1){
+                    console.log( hintElements[i])
+                    hintElements[i].classList.add("tada");
+                    hintElements[i].dataset.hint = hint[j] ;
+                }
+                i++;
+            }, defaultWait + (additionalTime * j));
         }
-        else if(item == 1){
-            elements[i].dataset.hint = 1;
-        }
-        i++;
+        setTimeout(()=>{
+            resolve('resolved');
+        }, defaultWait + (additionalTime * 2));
     });
 }

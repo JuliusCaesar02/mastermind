@@ -1,11 +1,23 @@
+:root{
+    --defaultPin1: 135,112,214; 
+    --defaultPin2: 102,51,153;
+    --defaultPinS: 135,112,214;
+
+    --defaultGradient1: 2,0,36;
+    --orangePin2: 255,68,0;
+    --yellowPin2: 255,205,0;
+    --greenPin2: 0,255,117;
+    --pinkPin2: 248,0,255;
+    --redPin2: 255,0,0;
+    --bluePin2: 0,129,255;
+}
+
 body{
     background-color: rgb(20, 19, 19);
 }
 #board {
     position: relative;
     display: flex;
-    max-width: 500px;
-    height: 75vh;
     background-color: rgb(44, 41, 41);
 }
 
@@ -24,16 +36,16 @@ body{
     place-self: center;
     width: 100%;
     column-gap: 20px;
+    padding: 4px 0;
 }
 
 #grid > div > div, #secret > div > div{ 
-    background: rgb(135,112,214);
-    background: linear-gradient(35deg, rgba(135,112,214,1) 0%, rgba(102,51,153,1) 100%);
+    background: var(--defaultPinS);
+    background: linear-gradient(35deg, rgba(var(--defaultPin1), 0.7) 0%, rgba(var(--defaultPin2), 0.7));
     place-self: center;
-    height: 42px;
-    width: 42px;
+    height: 38px;
+    width: 38px;
     border-radius: 1000px;
-    opacity: .7;
     -webkit-box-shadow: -4px 5px 12px 1px #1A1A1A; 
     box-shadow: -4px 5px 12px 1px #1A1A1A;
 }
@@ -49,7 +61,7 @@ body{
 }
 
 #grid > div.selected-row > div:hover{
-    opacity: 1;
+    background: linear-gradient(35deg, rgba(var(--defaultPin1), 1) 0%, rgba(var(--defaultPin2), 1));
 }
 
 #check-grid {
@@ -95,8 +107,8 @@ body{
     border-radius: 1000px;
     width: fit-content;
     align-items: center;
-    right: 33px;
-    top: 26px;
+    right: 145px;
+    top: -90px;
     column-gap: 5px;
     border: transparent 26px solid;
     background-clip: content-box;
@@ -123,38 +135,63 @@ body{
 }
 
 div[data-color="orange"]{
-    background: rgb(2,0,36) !important;
-    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(255,68,0,1) 58%) !important;
+    background: rgb(var(--orangePin2)) !important;
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),0.7) 0%, rgba(var(--orangePin2),0.7) 58%) !important;
+}
+
+div[data-color="orange"]:hover{
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),1) 0%, rgba(var(--orangePin2),1) 58%) !important;
 }
 
 div[data-color="yellow"]{
-    background: rgb(2,0,36) !important;
-    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(255,205,0,1) 58%) !important;
+    background: rgb(var(--yellowPin2)) !important;
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),0.7) 0%, rgba(var(--yellowPin2),0.7) 58%) !important;
+}
+
+div[data-color="yellow"]:hover{
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),1) 0%, rgba(var(--yellowPin2),1) 58%) !important;
 }
 
 div[data-color="green"]{
-    background: rgb(2,0,36) !important;
-    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(0,255,117,1) 58%) !important;
+    background: rgb(var(--greenPin2)) !important;
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),0.7) 0%, rgba(var(--greenPin2),0.7) 58%) !important;
+}
+
+div[data-color="green"]:hover{
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),1) 0%, rgba(var(--greenPin2),1) 58%) !important;
 }
 
 div[data-color="pink"]{
-    background: rgb(2,0,36) !important;
-    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(248,0,255,1) 58%) !important;
+    background: rgb(var(--pinkPin2)) !important;
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),0.7) 0%, rgba(var(--pinkPin2),0.7) 58%) !important;
+}
+
+div[data-color="pink"]:hover{
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),1) 0%, rgba(var(--pinkPin2),1) 58%) !important;
 }
 
 div[data-color="red"]{
-    background: rgb(2,0,36) !important;
-    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(255,0,0,1) 58%) !important;
+    background: rgb(var(--redPin2)) !important;
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),0.7) 0%, rgba(var(--redPin2),0.7) 58%) !important;
+}
+
+div[data-color="red"]:hover{
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),1) 0%, rgba(var(--redPin2),1) 58%) !important;
 }
 
 div[data-color="blue"]{
-    background: rgb(2,0,36) !important;
-    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(0,129,255,1) 58%) !important;
+    background: var(--bluePin2) !important;
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),0.7) 0%, rgba(var(--bluePin2),0.7) 58%) !important;
 }
 
+div[data-color="blue"]:hover{
+    background: linear-gradient(35deg, rgba(var(--defaultGradient1),1) 0%, rgba(var(--bluePin2),1) 58%) !important;
+}
+
+
 div[data-color]{
-    box-shadow: -4px 5px 12px 1px #0c0c0c !important;
-    -webkit-box-shadow: -4px 5px 12px 1px #0c0c0c !important; 
+    box-shadow: -4px 5px 12px 1px #1A1A1A !important;
+    -webkit-box-shadow: -4px 5px 12px 1px #1A1A1A !important; 
 }
 
 div[data-hint="0"]{
