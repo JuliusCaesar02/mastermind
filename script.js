@@ -1,5 +1,5 @@
 const possibleColors = ["orange", "green", "pink", "yellow", "red", "blue"];
-var selectedRow = 10;
+var selectedRow = 11;
 var secret = [];
 
 
@@ -33,7 +33,10 @@ function nextRow(){
     let colors = getPlayingRowColors(elements);
     if(colors.includes(undefined)){
         row = document.querySelector("#grid > div:nth-child("+selectedRow +")");
-        row.classList.add("error");
+        row.classList.add("headShake");
+        row.addEventListener("animationend", () => {
+            row.classList.remove("headShake");
+        });
     }
     else {
         console.log(colors);
@@ -41,8 +44,8 @@ function nextRow(){
         if(hints.toString() == new Array(0, 0, 0, 0).toString()){
             console.log("You won");
         }
-        if(selectedRow == 1){
-            console.log("You lost");
+        if(selectedRow == 2){
+            console.log("You lost");  
         }
         else console.log(hints);
         removeListeners(elements);
@@ -57,7 +60,7 @@ function nextRow(){
 function highlightsRow(){
     let row;
     row = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+")");
-    row.classList.add("slideOutUp");
+    /*row.classList.add("slideOutUp");
     row.addEventListener("animationend", () => {
         row.classList.remove("slideOutUp");
         row.classList.remove("selected-row");
@@ -65,12 +68,23 @@ function highlightsRow(){
             let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
             row2.classList.add("selected-row");
         }
-    });
+    });*/
+    row.classList.remove("selected-row");
+    if(selectedRow > 1){
+        let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
+        row2.classList.add("selected-row");
+    }
+    else{
+        let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
+        row2.classList.remove("hidden");
+    }
 }
 
 function addListeners(elements){
     elements.forEach(item => {
         item.addEventListener("click", buttonClicked);
+        item.addEventListener("wheel", showColorMenu);
+
         item.addEventListener("mouseenter", showColorMenu);
         item.addEventListener("mouseleave", hideColorMenu);
     })
@@ -113,9 +127,9 @@ function menuItemClicked(evt){
 
     if(possibleColors.includes(color)){
         parent.dataset.color = color;
-        parent.classList.add("animation");
+        parent.classList.add("bounceIn");
         parent.addEventListener("animationend", () => {
-            parent.classList.remove("animation");
+            parent.classList.remove("bounceIn");
         });
     }
     console.log(color);
@@ -142,9 +156,9 @@ function buttonClicked(evt){
         }
         if(index >= possibleColors.length - 1) index = -1;
         element.dataset.color = possibleColors[index + 1];
-        element.classList.add("animation");
+        element.classList.add("bounceIn");
         element.addEventListener("animationend", () => {
-            element.classList.remove("animation");
+            element.classList.remove("bounceIn");
         });
     }
 }
@@ -195,7 +209,7 @@ function getPlayingRowColors(elements){
 }
 
 function paintSecret(secret){
-    let elements = document.querySelectorAll("#secret > div > div");
+    let elements = document.querySelectorAll("#secret > div");
     let i = 0;
     elements.forEach(item => {
         item.dataset.color = secret[i];
