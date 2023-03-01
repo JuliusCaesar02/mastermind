@@ -1,5 +1,5 @@
-const possibleColors = ["red", "green", "black", "yellow", "white", "blue"];
-var selectedRow = 1;
+const possibleColors = ["orange", "green", "pink", "yellow", "red", "blue"];
+var selectedRow = 10;
 var secret = [];
 
 
@@ -12,21 +12,61 @@ window.addEventListener("load", (event) => {
     elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
     addListeners(elements);
 
-    document.getElementById("check").addEventListener("click", ((e)=>{
-        let colors = getPlayingRowColors(elements);
+    document.getElementById("check").addEventListener("click", nextRow);
+    document.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            let elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+            elements.forEach(item => {
+                console.log(item);
+                try{
+                    item.removeChild(item.firstChild);
+                } catch(e){
+                }
+            })
+            nextRow();
+        }
+    });
+});
+
+function nextRow(){
+    var elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+    let colors = getPlayingRowColors(elements);
+    if(colors.includes(undefined)){
+        row = document.querySelector("#grid > div:nth-child("+selectedRow +")");
+        row.classList.add("error");
+    }
+    else {
         console.log(colors);
         hints = checkSecret(secret, colors);
-        if(hints == [1, 1, 1, 1]){
+        if(hints.toString() == new Array(0, 0, 0, 0).toString()){
             console.log("You won");
+        }
+        if(selectedRow == 1){
+            console.log("You lost");
         }
         else console.log(hints);
         removeListeners(elements);
         paintHints(hints);
-        selectedRow++;
+        selectedRow--;
         elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+        highlightsRow();
         addListeners(elements);
-    }));
-});
+    }
+}
+
+function highlightsRow(){
+    let row;
+    row = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+")");
+    row.classList.add("slideOutUp");
+    row.addEventListener("animationend", () => {
+        row.classList.remove("slideOutUp");
+        row.classList.remove("selected-row");
+        if(selectedRow > 0){
+            let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
+            row2.classList.add("selected-row");
+        }
+    });
+}
 
 function addListeners(elements){
     elements.forEach(item => {
@@ -48,11 +88,8 @@ function showColorMenu(evt){
     let element = evt.currentTarget;
     console.log(element);
     let menuDiv = document.createElement("div");
-    let menuWrapper = document.createElement("div");
     menuDiv.classList.add("color-menu");
-    menuWrapper.classList.add("color-menu-wrapper");
-    element.appendChild(menuWrapper);
-    menuWrapper.appendChild(menuDiv);
+    element.appendChild(menuDiv);
 
     for(let i = 0; i < possibleColors.length; i++){
         let menuItemDiv = document.createElement("div");
@@ -72,10 +109,14 @@ function hideColorMenu(evt){
 function menuItemClicked(evt){
     let element = evt.currentTarget;
     let color = element.dataset.color;
-    let parent = element.parentElement.parentElement.parentElement;
+    let parent = element.parentElement.parentElement;
 
     if(possibleColors.includes(color)){
         parent.dataset.color = color;
+        parent.classList.add("animation");
+        parent.addEventListener("animationend", () => {
+            parent.classList.remove("animation");
+        });
     }
     console.log(color);
 }
@@ -89,17 +130,22 @@ function getParent (element, hasClass) {
 }
 
 function buttonClicked(evt){
-    if(!evt.target.classList.contains("color-menu") && !evt.target.classList.contains("color-menu-item")){
+    if(!evt.target.classList.contains("color-menu-item")){
         let element = evt.currentTarget;
         let prevColor = element.dataset.color;
-        let index = 0;
+        let index = -1;
         for(var i = 0; i < possibleColors.length; i++){
             if(prevColor === possibleColors[i]){
                 index = i;
                 break;
             } 
         }
+        if(index >= possibleColors.length - 1) index = -1;
         element.dataset.color = possibleColors[index + 1];
+        element.classList.add("animation");
+        element.addEventListener("animationend", () => {
+            element.classList.remove("animation");
+        });
     }
 }
 

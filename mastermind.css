@@ -6,16 +6,16 @@ body{
     display: flex;
     max-width: 500px;
     height: 75vh;
+    background-color: rgb(44, 41, 41);
 }
 
 #grid {
     position: relative;
     display: grid;
     flex-grow: 1;
-    height: 100%;
     grid-template: repeat(10, 1fr) / repeat(1, 1fr);
     row-gap: 7px;
-    padding: 20px;
+    margin: 20px;
 }
 
 #grid > div, #secret > div{
@@ -25,33 +25,29 @@ body{
     height: 100%;
     width: 100%;
     column-gap: 20px;
+    padding: 0 20px;
 }
 
 #grid > div > div, #secret > div > div{ 
-    background-color: rebeccapurple;
+    background: rgb(135,112,214);
+    background: linear-gradient(35deg, rgba(135,112,214,1) 0%, rgba(102,51,153,1) 100%);
     place-self: center;
-    height: 50px;
-    width: 50px;
+    height: 42px;
+    width: 42px;
     border-radius: 1000px;
+    filter: opacity(0.7);
+    -webkit-box-shadow: -4px 5px 12px 1px #1A1A1A; 
+    box-shadow: -4px 5px 12px 1px #1A1A1A;
 }
 
-#grid #cover {
-    position: absolute;
-    display: block;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    background-color: rgb(44, 41, 41);
-    z-index: -1;
+#grid > div.selected-row > div:hover{
+    filter: opacity(1);
 }
 
 #check-grid {
     display: grid;
     grid-template: repeat(10, 1fr) / repeat(1, 1fr);
     row-gap: 7px;
-    height: 100%;
     background-color: rgb(29, 25, 25);
     padding: 20px 5px;
 }
@@ -63,8 +59,8 @@ body{
 }
 
 #check-grid > div > div {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     margin: 2px;
     place-self: center;
     background-color: rgb(73, 73, 73);
@@ -78,51 +74,160 @@ body{
 .color-menu {
     position: relative;
     display: flex;
-    background-color: rgba(36, 34, 34, 0.815);
+    background-color: rgb(36, 34, 34);
     border-radius: 1000px;
     width: fit-content;
     align-items: center;
-    height: 60px;
-    top: 60px;
+    right: 33px;
+    top: 26px;
     column-gap: 5px;
-    padding: 0 5px;
-}
-
-.color-menu-wrapper {
-    width: 200px;
-    height: 100px;
-    background-color: rgba(76, 0, 130, 0);
+    border: transparent 26px solid;
+    background-clip: content-box;
 }
 
 .color-menu-item {
-    height: 50px;
-    width: 50px;
+    height: 42px;
+    width: 42px;
+    margin: 5px 0;
     border-radius: 1000px;
+    filter: opacity(0.6);
 }
 
-div[data-color="red"]{
-    background-color: red !important;
+.color-menu-item:hover{
+    filter: opacity(1);
+}
+
+.color-menu-item:first-child{
+    margin-left: 5px;
+}
+
+.color-menu-item:last-child{
+    margin-right: 5px;
+}
+
+div[data-color="orange"]{
+    background: rgb(2,0,36) !important;
+    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(255,68,0,1) 58%) !important;
 }
 
 div[data-color="yellow"]{
-    background-color: yellow !important;
+    background: rgb(2,0,36) !important;
+    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(255,205,0,1) 58%) !important;
 }
 
 div[data-color="green"]{
-    background-color: green !important;
+    background: rgb(2,0,36) !important;
+    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(0,255,117,1) 58%) !important;
 }
 
-div[data-color="black"]{
-    background-color: black !important;
+div[data-color="pink"]{
+    background: rgb(2,0,36) !important;
+    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(248,0,255,1) 58%) !important;
 }
 
-div[data-color="white"]{
-    background-color: white !important;
+div[data-color="red"]{
+    background: rgb(2,0,36) !important;
+    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(255,0,0,1) 58%) !important;
 }
 
 div[data-color="blue"]{
-    background-color: blue !important;
+    background: rgb(2,0,36) !important;
+    background: linear-gradient(35deg, rgba(2,0,36,1) 0%, rgba(0,129,255,1) 58%) !important;
 }
+
+div[data-color]{
+    box-shadow: -4px 5px 12px 1px #0c0c0c !important;
+    -webkit-box-shadow: -4px 5px 12px 1px #0c0c0c !important; 
+}
+
+.animation {
+    -webkit-animation: bounceIn .3s;
+    -o-animation: bounceIn .3s;
+    animation: bounceIn .3s;
+}
+
+@keyframes slideOutUp {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+  
+    to {
+      visibility: hidden;
+      transform: translate3d(0, -115%, 0);
+    }
+  }
+  
+  .slideOutUp {
+    animation: slideOutUp .5s;
+  }
+
+@-webkit-keyframes bounceIn {
+    0%, 20%, 40%, 60%, 80%, 100% {
+      -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+      transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+      opacity: 0;
+      -webkit-transform: scale3d(.3, .3, .3);
+      transform: scale3d(.3, .3, .3);
+    }
+    20% {
+      -webkit-transform: scale3d(1.1, 1.1, 1.1);
+      transform: scale3d(1.1, 1.1, 1.1);
+    }
+    40% {
+      -webkit-transform: scale3d(.9, .9, .9);
+      transform: scale3d(.9, .9, .9);
+    }
+    60% {
+      opacity: 1;
+      -webkit-transform: scale3d(1.03, 1.03, 1.03);
+      transform: scale3d(1.03, 1.03, 1.03);
+    }
+    80% {
+      -webkit-transform: scale3d(.97, .97, .97);
+      transform: scale3d(.97, .97, .97);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: scale3d(1, 1, 1);
+      transform: scale3d(1, 1, 1);
+    }
+  }
+  
+  @keyframes bounceIn {
+    0%, 20%, 40%, 60%, 80%, 100% {
+      -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+      transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+      opacity: 0;
+      -webkit-transform: scale3d(.3, .3, .3);
+      transform: scale3d(.3, .3, .3);
+    }
+    20% {
+      -webkit-transform: scale3d(1.1, 1.1, 1.1);
+      transform: scale3d(1.1, 1.1, 1.1);
+    }
+    40% {
+      -webkit-transform: scale3d(.9, .9, .9);
+      transform: scale3d(.9, .9, .9);
+    }
+    60% {
+      opacity: 1;
+      -webkit-transform: scale3d(1.03, 1.03, 1.03);
+      transform: scale3d(1.03, 1.03, 1.03);
+    }
+    80% {
+      -webkit-transform: scale3d(.97, .97, .97);
+      transform: scale3d(.97, .97, .97);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: scale3d(1, 1, 1);
+      transform: scale3d(1, 1, 1);
+    }
+  }
 
 div[data-hint="0"]{
     background-color: black !important;
@@ -134,4 +239,13 @@ div[data-hint="1"]{
 
 #secret {
     display: none;
+}
+
+.selected-row{
+    background-color: #1e161682;
+    border-radius: 1000px;
+}
+
+.selected-row.error{
+    background-color: #b61b1b82;
 }
