@@ -9,12 +9,12 @@ window.addEventListener("load", (event) => {
     paintSecret(secret);
     console.log(secret);
 
-    elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+    elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div:not(.rowAnimation)");
     addListeners(elements);
 
     document.getElementById("check").addEventListener("click", nextRow);
     document.addEventListener("keyup", function(event) {
-        if (event.key === "Enter") {
+        if (event.key === "Enter" || event.key === " ") {
             let elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
             elements.forEach(item => {
                 console.log(item);
@@ -29,7 +29,7 @@ window.addEventListener("load", (event) => {
 });
 
 function nextRow(){
-    var elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+    var elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div:not(.rowAnimation)");
     let colors = getPlayingRowColors(elements);
     if(colors.includes(undefined)){
         row = document.querySelector("#grid > div:nth-child("+selectedRow +")");
@@ -53,39 +53,39 @@ function nextRow(){
             selectedRow--;
             elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
             highlightsRow();
-            addListeners(elements);
+            if(selectedRow != 1){
+                addListeners(elements);
+            }
         })
     }
 }
 
 function highlightsRow(){
-    let row;
-    row = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+")");
-    /*row.classList.add("slideOutUp");
-    row.addEventListener("animationend", () => {
-        row.classList.remove("slideOutUp");
-        row.classList.remove("selected-row");
-        if(selectedRow > 0){
-            let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
-            row2.classList.add("selected-row");
-        }
-    });*/
-    row.classList.remove("selected-row");
-    if(selectedRow > 1){
-        let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
-        row2.classList.add("selected-row");
-    }
-    else{
+    let row = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+")");
+    let animationRow = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+") > div.rowAnimation");
+
+    console.log(selectedRow)
+    if(selectedRow == 1){
         let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
         row2.classList.remove("hidden");
+    }
+    else {
+        animationRow.classList.add("animating");
+        animationRow.classList.add("slideOutUp");
+        row.classList.remove("selected-row");
+    
+        animationRow.addEventListener("animationend", () => {
+            animationRow.classList.remove("animating");
+            animationRow.classList.remove("slideOutUp");
+            let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
+            row2.classList.add("selected-row");
+        });
     }
 }
 
 function addListeners(elements){
     elements.forEach(item => {
         item.addEventListener("click", buttonClicked);
-        item.addEventListener("wheel", showColorMenu);
-
         item.addEventListener("mouseenter", showColorMenu);
         item.addEventListener("mouseleave", hideColorMenu);
     })
@@ -105,14 +105,16 @@ function showColorMenu(evt){
     let menuDiv = document.createElement("div");
     menuDiv.classList.add("color-menu");
     element.appendChild(menuDiv);
-
-    for(let i = 0; i < possibleColors.length; i++){
-        let menuItemDiv = document.createElement("div");
-        menuItemDiv.classList.add("color-menu-item");
-        menuItemDiv.dataset.color = possibleColors[i];
-        menuItemDiv.addEventListener("click", menuItemClicked);
-        menuDiv.appendChild(menuItemDiv);
-    }
+    
+    setTimeout(()=>{
+        for(let i = 0; i < possibleColors.length; i++){
+            let menuItemDiv = document.createElement("div");
+            menuItemDiv.classList.add("color-menu-item");
+            menuItemDiv.dataset.color = possibleColors[i];
+            menuItemDiv.addEventListener("click", menuItemClicked);
+            menuDiv.appendChild(menuItemDiv);
+        }
+    }, 300);
 }
 
 function hideColorMenu(evt){
