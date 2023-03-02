@@ -5,7 +5,7 @@ var secret = [];
 
 window.addEventListener("load", (event) => {
     var elements = [];
-    secret = generateSecret();
+    secret = generateSecret(1);
     paintSecret(secret);
     console.log(secret);
 
@@ -17,7 +17,6 @@ window.addEventListener("load", (event) => {
         if (event.key === "Enter" || event.key === " ") {
             let elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
             elements.forEach(item => {
-                console.log(item);
                 try{
                     item.removeChild(item.firstChild);
                 } catch(e){
@@ -39,21 +38,24 @@ function nextRow(){
         });
     }
     else {
-        console.log(colors);
         hints = checkSecret(secret, colors);
         removeListeners(elements);
         paintHints(hints)
         .then(()=>{
             if(hints.toString() == new Array(0, 0, 0, 0).toString()){
                 console.log("You won");
+                let secretRow = document.querySelector("#grid > div:nth-child(1)")
+                secretRow.classList.remove("hidden");
             }
             if(selectedRow == 2){
                 console.log("You lost");  
+                let secretRow = document.querySelector("#grid > div:nth-child(1)")
+                secretRow.classList.remove("hidden");
             }
-            selectedRow--;
-            elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
-            highlightsRow();
-            if(selectedRow != 1){
+            else{
+                selectedRow--;
+                elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+                highlightsRow();
                 addListeners(elements);
             }
         })
@@ -64,7 +66,6 @@ function highlightsRow(){
     let row = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+")");
     let animationRow = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+") > div.rowAnimation");
 
-    console.log(selectedRow)
     if(selectedRow == 1){
         let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
         row2.classList.remove("hidden");
@@ -101,7 +102,6 @@ function removeListeners(elements){
 
 function showColorMenu(evt){
     let element = evt.currentTarget;
-    console.log(element);
     let menuDiv = document.createElement("div");
     menuDiv.classList.add("color-menu");
     element.appendChild(menuDiv);
@@ -120,7 +120,6 @@ function showColorMenu(evt){
 function hideColorMenu(evt){
     let element = evt.currentTarget;
     element.removeChild(element.firstChild);
-    console.log(element);
 }
 
 function menuItemClicked(evt){
@@ -135,7 +134,6 @@ function menuItemClicked(evt){
             parent.classList.remove("bounceIn");
         });
     }
-    console.log(color);
 }
 
 function getParent (element, hasClass) {
@@ -166,17 +164,47 @@ function buttonClicked(evt){
     }
 }
 
-function generateSecret(){
+function generateSecret(difficulty){
+    let actualPossibleColors = possibleColors;
     let secret = [];
-    for(let i = 0; i < 4; i++){
-        secret[i] = possibleColors[Math.floor(Math.random() * 6)];
+    switch(difficulty){
+        case 0:
+            for(let i = 0; i < 4; i++){
+                let index = Math.floor(Math.random() * actualPossibleColors.length);
+                secret[i] = actualPossibleColors[index];
+                actualPossibleColors.splice(index, 1);
+            }
+            break;
+        case 1:
+            while(secret.length < 4){
+                let index = Math.floor(Math.random() * actualPossibleColors.length);
+                secret.push(actualPossibleColors[index]);
+                let newArray = secret.slice();
+                newArray.sort();
+                if(newArray.length > 2){
+                    if(newArray[newArray.length - 1] === newArray[newArray.length - 2] && newArray[newArray.length - 2] === newArray[newArray.length - 3]){
+                        actualPossibleColors.splice(index, 1);
+                        secret.pop();
+                    }
+                    if(newArray.length > 3){
+                        if(newArray[newArray.length - 2] === newArray[newArray.length - 3] && newArray[newArray.length - 3] === newArray[newArray.length - 4]){
+                            actualPossibleColors.splice(index, 1);
+                            secret.pop();
+                        }
+                    }
+                }           
+            }
+            break;
+        case 2:
+            for(let i = 0; i < 4; i++){
+                secret[i] = actualPossibleColors[Math.floor(Math.random() * actualPossibleColors.length)];
+            }
+            break;
     }
     return secret;
 }
 
 function checkSecret(secret, combination){
-    console.log(secret);
-    console.log(combination);
     let partialCombination = [];
     let result = [];
     let updatedSecret = [...secret];
@@ -190,7 +218,6 @@ function checkSecret(secret, combination){
             partialCombination.push(combination[i]);
         }
     }
-    console.log(partialCombination);
 
     for(let i = 0; i < secret.length; i++){
         if(updatedSecret.includes(partialCombination[i])){
@@ -198,7 +225,6 @@ function checkSecret(secret, combination){
             result.push(1);
         }
     }
-    console.log(result);
     result.sort();
     return result;
 }
@@ -227,17 +253,17 @@ function paintHints(hint){
         let defaultWait = 350;
         let additionalTime = 300;
         for(let j = 0; j < hint.length; j++){
-            setTimeout(()=>{
-                if(hint[j] == 0 || hint[j] == 1){
-                    console.log( hintElements[i])
+            if(hint[j] == 0 || hint[j] == 1){
+                fractionOfTime++;
+                setTimeout(()=>{
                     hintElements[i].classList.add("tada");
-                    hintElements[i].dataset.hint = hint[j] ;
-                }
-                i++;
-            }, defaultWait + (additionalTime * j));
+                    hintElements[i].dataset.hint = hint[j];
+                    i++;
+                }, defaultWait + (additionalTime * i));
+            }
         }
         setTimeout(()=>{
             resolve('resolved');
-        }, defaultWait + (additionalTime * 2));
+        }, defaultWait + (additionalTime * i));
     });
 }
