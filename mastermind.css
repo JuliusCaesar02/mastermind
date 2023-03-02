@@ -1,6 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 :root{
-    --defaultPin1: 135,112,214; 
-    --defaultPin2: 102,51,153;
+    --defaultPin1: 200, 198, 209; 
+    --defaultPin2: 58, 54, 60;
     --defaultPinS: 135,112,214;
 
     --defaultGradient1: 2,0,36;
@@ -26,7 +27,9 @@ body{
 #board {
     position: relative;
     display: flex;
-    background-color: rgb(44, 41, 41);
+    background: #2e2e2e;
+    /*background: linear-gradient(25deg, rgba(151,53,255,1) 0%, rgba(193,200,15,1) 90%);*/
+    /*background: linear-gradient(188.18deg, #031D2C 0%, #010316 50.01%, #272E68 81.78%, #3872B6 100%);*/
 }
 
 #grid {
@@ -220,7 +223,7 @@ div[data-color]{
 
 div[data-hint="0"]{
     background: rgb(53,21,87) !important;
-    background: linear-gradient(35deg, rgba(53,21,87,1) 0%, rgba(0,0,0,1) 50%) !important;
+    background: linear-gradient(35deg, rgb(20 8 32) 0%, rgba(0,0,0,1) 50%) !important;
 }
 
 div[data-hint="1"]{
@@ -253,4 +256,13 @@ div[data-hint="1"]{
     flex-direction: column;
     width: fit-content;
     height: fit-content;
+}
+
+#logo{
+    font-family: 'Press Start 2P', cursive;
+    font-size: 4rem;
+    color: #565412;
+    text-shadow: 5px 5px yellow;
+    transform: perspective(191px) rotateX(23deg);
+    -webkit-transform: perspective(191px) rotateX(23deg);
 }
