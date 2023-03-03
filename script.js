@@ -165,17 +165,35 @@ function buttonClicked(evt){
 }
 
 function generateSecret(difficulty){
-    let actualPossibleColors = possibleColors;
+    let actualPossibleColors = possibleColors.slice();
     let secret = [];
     switch(difficulty){
-        case 0:
+        case 0: //No repeating colors
             for(let i = 0; i < 4; i++){
                 let index = Math.floor(Math.random() * actualPossibleColors.length);
                 secret[i] = actualPossibleColors[index];
                 actualPossibleColors.splice(index, 1);
             }
             break;
-        case 1:
+        case 1: //50% there is a single color repeated twice
+            while(secret.length < 4){
+                let index = Math.floor(Math.random() * actualPossibleColors.length);
+                secret.push(actualPossibleColors[index]);
+                if(secret.length == 1){
+                    if(Date.now() % 2){
+                        secret.push(actualPossibleColors[index]);
+                    }
+                }
+                actualPossibleColors.splice(index, 1);
+            }
+            let currentIndex = secret.length,  randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [secret[currentIndex], secret[randomIndex]] = [secret[randomIndex], secret[currentIndex]];
+            }
+            break;
+        case 2: //Random but colors can't be repeated more than twice
             while(secret.length < 4){
                 let index = Math.floor(Math.random() * actualPossibleColors.length);
                 secret.push(actualPossibleColors[index]);
@@ -195,7 +213,7 @@ function generateSecret(difficulty){
                 }           
             }
             break;
-        case 2:
+        case 3: //Full random (a single color can even appear four times, or there can also be 4 differents colors)
             for(let i = 0; i < 4; i++){
                 secret[i] = actualPossibleColors[Math.floor(Math.random() * actualPossibleColors.length)];
             }
@@ -252,18 +270,20 @@ function paintHints(hint){
         let i = 0;
         let defaultWait = 350;
         let additionalTime = 300;
+        let animationsToWait = 0;
         for(let j = 0; j < hint.length; j++){
             if(hint[j] == 0 || hint[j] == 1){
-                fractionOfTime++;
                 setTimeout(()=>{
+                    console.log( hintElements[i])
                     hintElements[i].classList.add("tada");
-                    hintElements[i].dataset.hint = hint[j];
+                    hintElements[i].dataset.hint = hint[j] ;
                     i++;
-                }, defaultWait + (additionalTime * i));
+                }, defaultWait + (additionalTime * animationsToWait));
+                animationsToWait++;
             }
         }
         setTimeout(()=>{
             resolve('resolved');
-        }, defaultWait + (additionalTime * i));
+        }, defaultWait + (additionalTime * animationsToWait));
     });
 }
