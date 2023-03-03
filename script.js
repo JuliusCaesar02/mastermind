@@ -100,7 +100,7 @@ function highlightsRow(){
 }
 
 /***
- * add listeners to all tacks of the row is being played
+ * Add listeners to all tacks of the row is being played
  * @param {Elements} elements array of dom elements
  */ 
 function addListeners(elements){
@@ -112,7 +112,7 @@ function addListeners(elements){
 }
 
 /***
- * remove listeners to all tacks of the row last round was played
+ * Remove listeners to all tacks of the row last round was played
  * @param {Elements} elements array of dom elements
  */ 
 function removeListeners(elements){
@@ -265,6 +265,8 @@ function checkSecret(secret, combination){
     let partialCombination = [];
     let result = [];
     let updatedSecret = [...secret];
+    console.log("secret: " +secret)
+    console.log("updated secret: " +updatedSecret)
     for(let i = 0; i < secret.length; i++){
         if(combination[i] == secret[i]){
             partialCombination.push(null);
@@ -275,10 +277,13 @@ function checkSecret(secret, combination){
             partialCombination.push(combination[i]);
         }
     }
+    console.log("partial combination: " +partialCombination)
 
     for(let i = 0; i < secret.length; i++){
+        console.log("secret sliced: " +updatedSecret)
+        console.log("partial combination checked: " +partialCombination[i])
         if(updatedSecret.includes(partialCombination[i])){
-            updatedSecret.splice(updatedSecret.indexOf(partialCombination[i]));
+            updatedSecret.splice(updatedSecret.indexOf(partialCombination[i], 1, ""));
             result.push(1);
         }
     }

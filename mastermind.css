@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 :root{
-    --defaultPin1: 200, 198, 209; 
-    --defaultPin2: 58, 54, 60;
+    --defaultPin1: 200,198,209; 
+    --defaultPin2: 58,54,60;
     --defaultPinS: 135,112,214;
 
     --defaultGradient1: 2,0,36;
-    --orangePin2: 255,68,0;
+    --orangePin2: 255,111,38;
     --yellowPin2: 255,205,0;
     --greenPin2: 0,255,117;
     --pinkPin2: 248,0,255;
@@ -23,6 +23,7 @@ body{
     height: 100vh;
     width: 100vw;
     margin: 0;
+    font-family: 'Press Start 2P', cursive;
 }
 #board {
     position: relative;
@@ -81,7 +82,7 @@ body{
     z-index: 1;
 }
 
-#secret.hidden {
+/* #secret.hidden {
     background-color: #231d1d;
     border-radius: 100px;
 }
@@ -89,7 +90,7 @@ body{
     background: transparent !important;
     box-shadow: -4px 5px 12px 1px transparent !important;
     -webkit-box-shadow: -4px 5px 12px 1px transparent !important;
-}
+} */
 
 #grid > div.selected-row > div:hover{
     background: linear-gradient(35deg, rgba(var(--defaultPin1), 1) 0%, rgba(var(--defaultPin2), 1));
@@ -135,9 +136,9 @@ body{
     width: fit-content;
     align-items: center;
     right: 145px;
-    top: -90px;
+    top: -92px;
     column-gap: 5px;
-    border: transparent 26px solid;
+    border: transparent 30px solid;
     background-clip: content-box;
 }
 
@@ -236,10 +237,15 @@ div[data-hint="1"]{
     border-radius: 1000px;
 }
 
+@property --a {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 35deg;
+}
+
 .button{
     height: 50px;
     width: 100px;
-    background-color: rgb(175, 69, 175);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -247,10 +253,18 @@ div[data-hint="1"]{
     font-size: large;
     cursor: pointer;
     filter: opacity(0.8);
+    font-size: .9rem;
+    --a: 35deg;
+    background: linear-gradient(var(--a), rgba(151,53,255,1) 30%, rgba(193,200,15,1) 80%);
+    transition: --a .7s;
+    color: #0e0e0e;
+    user-select: none;
 }
 .button:hover{
+    --a: 120deg;
     filter: opacity(1);
 }
+
 #full-board{
     display: flex;
     flex-direction: column;
@@ -259,10 +273,14 @@ div[data-hint="1"]{
 }
 
 #logo{
-    font-family: 'Press Start 2P', cursive;
+    background: -webkit-linear-gradient(35deg, rgba(151,53,255,1) 30%, rgba(193,200,15,1) 80%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-size: 4rem;
-    color: #565412;
-    text-shadow: 5px 5px yellow;
+    /* color: #565412;*/
+    user-select: none;
     transform: perspective(191px) rotateX(23deg);
     -webkit-transform: perspective(191px) rotateX(23deg);
+    box-shadow: 10px 5px 5px linear-gradient(35deg, rgba(151,53,255,1) 30%, rgba(193,200,15,1) 80%);
 }
