@@ -27,6 +27,17 @@ window.addEventListener("load", (event) => {
     });
 });
 
+/***
+ * Remove listeners from the row that was played in the previous round
+ * 
+ * Add listeners to the new row elements
+ * 
+ * Check if the game is won or lost
+ * 
+ * Color black/white tacks on the left of the board
+ * 
+ * Play highlighted row change animation
+ */
 function nextRow(){
     var elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div:not(.rowAnimation)");
     let colors = getPlayingRowColors(elements);
@@ -62,6 +73,10 @@ function nextRow(){
     }
 }
 
+/***
+ * Remove the old highlighted row and highlight the new row, 
+ * doing trickery in order to "animate" only the background of the tacks and not also the tacks themselfes.
+ */
 function highlightsRow(){
     let row = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+")");
     let animationRow = document.querySelector("#grid > div:nth-child("+(selectedRow + 1)+") > div.rowAnimation");
@@ -84,6 +99,10 @@ function highlightsRow(){
     }
 }
 
+/***
+ * add listeners to all tacks of the row is being played
+ * @param {Elements} elements array of dom elements
+ */ 
 function addListeners(elements){
     elements.forEach(item => {
         item.addEventListener("click", buttonClicked);
@@ -92,6 +111,10 @@ function addListeners(elements){
     })
 }
 
+/***
+ * remove listeners to all tacks of the row last round was played
+ * @param {Elements} elements array of dom elements
+ */ 
 function removeListeners(elements){
     elements.forEach(item => {
         item.removeEventListener("click", buttonClicked);
@@ -136,14 +159,6 @@ function menuItemClicked(evt){
     }
 }
 
-function getParent (element, hasClass) {
-    let parent = element.parentNode
-
-    while (parent !== document) {
-        return parent.className.includes(hasClass);
-    } 
-}
-
 function buttonClicked(evt){
     if(!evt.target.classList.contains("color-menu-item")){
         let element = evt.currentTarget;
@@ -164,18 +179,31 @@ function buttonClicked(evt){
     }
 }
 
+/****
+ * Requires one of the following prefixes: 
+ * 
+ * 0: No repeating colors
+ * 
+ * 1: 50% there is a single color repeated twice
+ * 
+ * 2: Random but colors can't be repeated more than twice
+ * 
+ * 3: Full random (a single color can even appear four times, or there can also be 4 differents colors)
+ * @param {int} difficulty difficulty value of the game
+ * 
+ */
 function generateSecret(difficulty){
     let actualPossibleColors = possibleColors.slice();
     let secret = [];
     switch(difficulty){
-        case 0: //No repeating colors
+        case 0:
             for(let i = 0; i < 4; i++){
                 let index = Math.floor(Math.random() * actualPossibleColors.length);
                 secret[i] = actualPossibleColors[index];
                 actualPossibleColors.splice(index, 1);
             }
             break;
-        case 1: //50% there is a single color repeated twice
+        case 1:
             while(secret.length < 4){
                 let index = Math.floor(Math.random() * actualPossibleColors.length);
                 secret.push(actualPossibleColors[index]);
@@ -193,7 +221,7 @@ function generateSecret(difficulty){
                 [secret[currentIndex], secret[randomIndex]] = [secret[randomIndex], secret[currentIndex]];
             }
             break;
-        case 2: //Random but colors can't be repeated more than twice
+        case 2:
             while(secret.length < 4){
                 let index = Math.floor(Math.random() * actualPossibleColors.length);
                 secret.push(actualPossibleColors[index]);
@@ -213,7 +241,7 @@ function generateSecret(difficulty){
                 }           
             }
             break;
-        case 3: //Full random (a single color can even appear four times, or there can also be 4 differents colors)
+        case 3:
             for(let i = 0; i < 4; i++){
                 secret[i] = actualPossibleColors[Math.floor(Math.random() * actualPossibleColors.length)];
             }
@@ -222,6 +250,17 @@ function generateSecret(difficulty){
     return secret;
 }
 
+/***
+ * Checks if the combination elements are present inside the secret ones.
+ * 
+ * Returns an array of:
+ * 
+ *  0: color right in the right index)
+ * 
+ *  1: color right in wrong index
+ * @param {string[]} secret array of colors to guess
+ * @param {string[]} combination array of colors inputted by the user
+ */
 function checkSecret(secret, combination){
     let partialCombination = [];
     let result = [];
@@ -247,6 +286,12 @@ function checkSecret(secret, combination){
     return result;
 }
 
+/***
+ * Get the color of the tacks played by the player
+ * 
+ * Returns an array of string
+ * @param {string[]} elements array of HTML dom elements childs of the playing row
+ */
 function getPlayingRowColors(elements){
     let combination = [];
     elements.forEach(item => {
@@ -255,6 +300,10 @@ function getPlayingRowColors(elements){
     return combination;
 }
 
+/***
+ * Change the color of tacks to guess in the id=secret div
+ * @param {string[]} secret array of colours to guess
+ */
 function paintSecret(secret){
     let elements = document.querySelectorAll("#secret > div");
     let i = 0;
@@ -264,6 +313,13 @@ function paintSecret(secret){
     });
 }
 
+/***
+ * color the black/white tacks on the left side of the boards, timing the animations
+ * @param {int[]} hint array of 0/1, result of the comparison between
+ *  playing sequence and sequence to guess
+ * 
+ * return a promise in order to sincronise the animations
+ */
 function paintHints(hint){
     return new Promise(resolve => {
         let hintElements = document.querySelectorAll("#check-grid > div:nth-child("+selectedRow+") > div");
