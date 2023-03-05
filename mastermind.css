@@ -42,7 +42,7 @@ body{
     margin: 20px;
 }
 
-#grid > div {
+#grid > div, #difficulty-popup .item > div{
     display: grid;
     position: relative;
     grid-template: repeat(1, 1fr) / repeat(4, 1fr);
@@ -52,7 +52,7 @@ body{
     padding: 4px 0;
 }
 
-#grid > div > div, #secret > div > div{ 
+#grid > div > div, #difficulty-popup .item div > div{ 
     background: var(--defaultPinS);
     background: linear-gradient(35deg, rgba(var(--defaultPin1), 0.7) 0%, rgba(var(--defaultPin2), 0.7));
     place-self: center;
@@ -283,4 +283,58 @@ div[data-hint="1"]{
     transform: perspective(191px) rotateX(23deg);
     -webkit-transform: perspective(191px) rotateX(23deg);
     box-shadow: 10px 5px 5px linear-gradient(35deg, rgba(151,53,255,1) 30%, rgba(193,200,15,1) 80%);
+}
+
+#difficulty-popup{
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(37, 35, 35, 0.938);
+    z-index: 999;
+}
+
+#difficulty-popup > div{
+    display: grid;
+    grid-template: repeat(2, 1fr) / repeat(2, 1fr);
+    gap: 70px 70px;
+    height: 70%;
+    margin: 25%;
+}
+
+#difficulty-popup .item{
+    background-color: rgb(133, 133, 192);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    user-select: none;
+    transition: all .2s ease-in-out;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+#difficulty-popup .item:hover{
+    transform: scale(1.2);
+}
+#difficulty-popup .item h1{
+    font-size: 2rem;
+}
+
+#difficulty-popup .item p{
+    text-align: center;
+    padding: 0 15px;
+}
+
+#difficulty-popup .item > div{
+    background-color: #272525;
+    width: 80%;
+    margin-top: 20px;
+}
+
+#difficulty-popup.hidden{
+    display: none;
 }

@@ -160,6 +160,53 @@
         </div>
     </div>
     <div class="button" id="check">Check</div>
+
+    <div id="difficulty-popup">
+        <div>
+            <div class="item" data-difficulty="0">
+                <h1>Easy</h1>
+                <div class="selected-row">
+                    <div data-color="red"></div>
+                    <div data-color="green"></div>
+                    <div data-color="pink"></div>
+                    <div data-color="orange"></div>
+                </div>
+                <p>All colors are unique</p>
+            </div>
+            <div class="item" data-difficulty="1">
+                <h1>Medium</h1>
+                <div class="selected-row">
+                    <div data-color="red"></div>
+                    <div data-color="green"></div>
+                    <div data-color="pink"></div>
+                    <div data-color="red"></div>
+                </div>
+                <p>There can be a single color repeated twice</p>
+            </div>
+            <div class="item" data-difficulty="2">
+                <h1>Hard</h1>
+                <div class="selected-row">
+                    <div data-color="red"></div>
+                    <div data-color="green"></div>
+                    <div data-color="red"></div>
+                    <div data-color="green"></div>
+                </div>
+                <p>Colors are random but the same can not appear more than twice</p>
+            </div>
+            <div class="item" data-difficulty="3">
+                <h1>ඞ</h1>
+                <div class="selected-row">
+                    <div data-color="red"></div>
+                    <div data-color="red"></div>
+                    <div data-color="green"></div>
+                    <div data-color="red"></div>
+                </div>
+                <p>Colors are completely random.
+                    From all unique to all the same
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="script.js"></script>
 </html>

@@ -2,10 +2,20 @@ const possibleColors = ["orange", "green", "pink", "yellow", "red", "blue"];
 var selectedRow = 11;
 var secret = [];
 
-
 window.addEventListener("load", (event) => {
+    let difficultyButtons = document.querySelectorAll("#difficulty-popup div div.item");
+    difficultyButtons.forEach(item => {
+        item.addEventListener("click", setDifficulty);
+    });
+});
+
+function setDifficulty(evt){
     var elements = [];
-    secret = generateSecret(1);
+
+    document.getElementById("difficulty-popup").classList.add("hidden");
+    let difficulty = parseInt(evt.currentTarget.dataset.difficulty);
+    console.log(difficulty)
+    secret = generateSecret(difficulty);
     paintSecret(secret);
     console.log(secret);
 
@@ -25,7 +35,7 @@ window.addEventListener("load", (event) => {
             nextRow();
         }
     });
-});
+}
 
 /***
  * Remove listeners from the row that was played in the previous round
@@ -105,6 +115,8 @@ function highlightsRow(){
  */ 
 function addListeners(elements){
     elements.forEach(item => {
+        item.addEventListener("wheel", showColorMenu);
+
         item.addEventListener("click", buttonClicked);
         item.addEventListener("mouseenter", showColorMenu);
         item.addEventListener("mouseleave", hideColorMenu);
@@ -265,8 +277,6 @@ function checkSecret(secret, combination){
     let partialCombination = [];
     let result = [];
     let updatedSecret = [...secret];
-    console.log("secret: " +secret)
-    console.log("updated secret: " +updatedSecret)
     for(let i = 0; i < secret.length; i++){
         if(combination[i] == secret[i]){
             partialCombination.push(null);
@@ -277,11 +287,8 @@ function checkSecret(secret, combination){
             partialCombination.push(combination[i]);
         }
     }
-    console.log("partial combination: " +partialCombination)
 
     for(let i = 0; i < secret.length; i++){
-        console.log("secret sliced: " +updatedSecret)
-        console.log("partial combination checked: " +partialCombination[i])
         if(updatedSecret.includes(partialCombination[i])){
             updatedSecret.splice(updatedSecret.indexOf(partialCombination[i], 1, ""));
             result.push(1);
