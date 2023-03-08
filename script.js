@@ -1,22 +1,61 @@
 const possibleColors = ["orange", "green", "pink", "yellow", "red", "blue"];
 var selectedRow = 11;
 var secret = [];
+var difficulty;
 
-window.addEventListener("load", (event) => {
+window.addEventListener("load", chooseDifficulty);
+
+/***
+ * Show difficuty menu
+ */
+function chooseDifficulty(){
+    document.getElementById("difficulty-popup").classList.remove("hidden");
     let difficultyButtons = document.querySelectorAll("#difficulty-popup div div.item");
     difficultyButtons.forEach(item => {
         item.addEventListener("click", setDifficulty);
     });
-});
+}
 
+/***
+ * Apply selected difficulty
+ */
 function setDifficulty(evt){
-    var elements = [];
-
     document.getElementById("difficulty-popup").classList.add("hidden");
-    let difficulty = parseInt(evt.currentTarget.dataset.difficulty);
-    console.log(difficulty)
+    difficulty = parseInt(evt.currentTarget.dataset.difficulty);
+    
+    resetBoard();
+}
+
+/***
+ * Reset the board from the previous game
+ */
+function resetBoard(){
+    selectedRow = 11;
     secret = generateSecret(difficulty);
+
+    document.getElementById("secret").classList.add("hidden");
+
+    var elements = document.querySelectorAll("#grid div[data-color]");
+    console.log(elements)
+    elements.forEach(item => {
+        item.removeAttribute("data-color");
+    });
+    elements = document.querySelectorAll("#check-grid div[data-hint]");
+    elements.forEach(item => {
+        item.removeAttribute("data-hint");
+    });
+
+    elements = document.getElementsByClassName("selected-row");
+    console.log(elements)
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.remove("selected-row");
+    }
+
+    let row = document.querySelector("#grid > div:nth-child("+selectedRow+")");
+    row.classList.add("selected-row");
+
     paintSecret(secret);
+    highlightsRow();
     console.log(secret);
 
     elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div:not(.rowAnimation)");
@@ -67,11 +106,17 @@ function nextRow(){
                 console.log("You won");
                 let secretRow = document.querySelector("#grid > div:nth-child(1)")
                 secretRow.classList.remove("hidden");
+                setTimeout(()=>{
+                    endGame(0);
+                }, 1500);
             }
-            if(selectedRow == 2){
+            else if(selectedRow == 2){
                 console.log("You lost");  
                 let secretRow = document.querySelector("#grid > div:nth-child(1)")
                 secretRow.classList.remove("hidden");
+                setTimeout(()=>{
+                    endGame(1);
+                }, 1500);
             }
             else{
                 selectedRow--;
@@ -81,6 +126,46 @@ function nextRow(){
             }
         })
     }
+}
+
+/***
+ * Display game win / game lost popup
+ * @param {boolean} winLose 0: Game won 1: Game lost
+ */
+function endGame(winLose){
+    var popup = document.getElementById("end-game-popup");
+    popup.classList.remove("hidden");
+
+    h1 = document.querySelector("#end-game-popup h1");
+
+    if(winLose == 0){
+        h1.textContent = "YOU WON!";
+    }
+    else if(winLose == 1){
+        h1.textContent = "You lost...";
+    }
+    document.getElementById("checkBoard-button").addEventListener("click", ()=>{
+        console.log(popup.classList)
+        popup.classList.add("hidden");
+        setTimeout(()=>{
+            document.addEventListener("click", showPopUp);
+        }, 300)
+        
+        function showPopUp(){
+            popup.classList.remove("hidden");
+            document.removeEventListener("click", showPopUp);
+        }
+    });
+
+    document.getElementById("tryAgain-button").addEventListener("click", ()=>{
+        popup.classList.add("hidden");
+        resetBoard();
+    });
+    document.getElementById("changeDifficulty-button").addEventListener("click", ()=>{
+        popup.classList.add("hidden");
+        resetBoard();
+        chooseDifficulty();
+    });
 }
 
 /***
@@ -95,7 +180,10 @@ function highlightsRow(){
         let row2 = document.querySelector("#grid > div:nth-child("+selectedRow+")");
         row2.classList.remove("hidden");
     }
-    else {
+    else if(selectedRow == 11){
+
+    }
+    else{
         animationRow.classList.add("animating");
         animationRow.classList.add("slideOutUp");
         row.classList.remove("selected-row");
@@ -342,7 +430,6 @@ function paintHints(hint){
         for(let j = 0; j < hint.length; j++){
             if(hint[j] == 0 || hint[j] == 1){
                 setTimeout(()=>{
-                    console.log( hintElements[i])
                     hintElements[i].classList.add("tada");
                     hintElements[i].dataset.hint = hint[j] ;
                     i++;

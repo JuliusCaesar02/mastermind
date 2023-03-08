@@ -82,7 +82,7 @@ body{
     z-index: 1;
 }
 
-/* #secret.hidden {
+#secret.hidden {
     background-color: #231d1d;
     border-radius: 100px;
 }
@@ -90,7 +90,7 @@ body{
     background: transparent !important;
     box-shadow: -4px 5px 12px 1px transparent !important;
     -webkit-box-shadow: -4px 5px 12px 1px transparent !important;
-} */
+}
 
 #grid > div.selected-row > div:hover{
     background: linear-gradient(35deg, rgba(var(--defaultPin1), 1) 0%, rgba(var(--defaultPin2), 1));
@@ -285,18 +285,6 @@ div[data-hint="1"]{
     box-shadow: 10px 5px 5px linear-gradient(35deg, rgba(151,53,255,1) 30%, rgba(193,200,15,1) 80%);
 }
 
-#difficulty-popup{
-    position: absolute;
-    height: 100vh;
-    width: 100%;
-    margin: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(37, 35, 35, 0.938);
-    z-index: 999;
-}
-
 #difficulty-popup > div{
     display: grid;
     grid-template: repeat(2, 1fr) / repeat(2, 1fr);
@@ -311,7 +299,6 @@ div[data-hint="1"]{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    user-select: none;
     transition: all .2s ease-in-out;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
@@ -337,4 +324,37 @@ div[data-hint="1"]{
 
 #difficulty-popup.hidden{
     display: none;
+}
+
+.popup{
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(37, 35, 35, 0.938);
+    z-index: 999;
+}
+
+.popup div, .popup p, .popup h1{
+    user-select: none;
+}
+
+#end-game-popup > div{
+    padding: 5%;
+    background-color: rgb(133, 133, 192);
+    text-align: center;
+}
+
+#end-game-popup.hidden{
+    display: none;
+}
+#end-game-popup div.item > div{
+    padding: 2px;
+    padding-bottom: 7px;
+}
+#end-game-popup div.item > div:hover{
+    background-color: #4a4a4a;
 }
