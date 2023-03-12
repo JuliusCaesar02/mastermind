@@ -61,22 +61,39 @@ function resetBoard(){
     elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div:not(.rowAnimation)");
     addListeners(elements);
 
-    document.getElementById("check").addEventListener("click", nextRow);
-    document.addEventListener("keyup", function(event) {
-        if (event.key === "Enter" || event.key === " ") {
-            let elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
-            elements.forEach(item => {
-                try{
-                    item.removeChild(item.firstChild);
-                } catch(e){
-                }
-            })
-            nextRow();
-        }
-    });
+    addNextRowListeners();
 }
 
 /***
+ * Checks the clicked keyboard key, remove eventual color menu and calls the function to 
+ * check the current row and go on with the next
+ */
+function nextRowKeyboard(event){
+    if (event.key === "Enter" || event.key === " ") {
+        let elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div");
+        elements.forEach(item => {
+            try{
+                item.removeChild(item.firstChild);
+            } catch(e){
+            }
+        })
+        nextRow();
+    }
+}
+
+function addNextRowListeners(){
+    document.getElementById("check").addEventListener("click", nextRow);
+    document.addEventListener("keyup", nextRowKeyboard);
+}
+
+function removeNextRowListeners(){
+    document.getElementById("check").removeEventListener("click", nextRow);
+    document.removeEventListener("keyup", nextRowKeyboard);
+}
+
+/***
+ * Remove listeners to the check row button and re-add after a few time in order to not skip rows due to spam of inputs
+ * 
  * Remove listeners from the row that was played in the previous round
  * 
  * Add listeners to the new row elements
@@ -88,8 +105,15 @@ function resetBoard(){
  * Play highlighted row change animation
  */
 function nextRow(){
+    console.log("remove")
+    removeNextRowListeners();
     var elements = document.querySelectorAll("#grid > div:nth-child("+selectedRow+") > div:not(.rowAnimation)");
     let colors = getPlayingRowColors(elements);
+
+    setTimeout(() => {
+        addNextRowListeners();
+    }, 700);
+
     if(colors.includes(undefined)){
         row = document.querySelector("#grid > div:nth-child("+selectedRow +")");
         row.classList.add("headShake");
