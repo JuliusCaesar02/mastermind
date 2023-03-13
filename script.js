@@ -45,7 +45,7 @@ function resetBoard(){
         item.removeAttribute("data-hint");
     });
 
-    elements = document.getElementsByClassName("selected-row");
+    elements = document.querySelectorAll(".grid .selected-row");
     console.log(elements)
     for (let i = 0; i < elements.length; i++) {
         elements[i].classList.remove("selected-row");

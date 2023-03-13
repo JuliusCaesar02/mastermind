@@ -359,7 +359,7 @@ div[data-hint="1"]{
     background-color: #4a4a4a;
 }
 
-@media (min-width:320px)  {
+@media (max-width: 600px)  {
     body{
         height: 100dvh;
     }
@@ -385,5 +385,11 @@ div[data-hint="1"]{
     #difficulty-popup .item div > div {
         height: 25px;
         width: 25px;
+    }
+    #end-game-popup div{
+        padding: 7%;
+    }
+    #end-game-popup div.item > div{
+        padding-bottom: 20px;
     }
 }
