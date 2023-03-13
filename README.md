@@ -1,8 +1,9 @@
 # MASTERMIND
 Simple Javascript Mastermind board game
 
-![Alt text](Mastermind%20img/Mastermind%20wonr%20game.png.jpg?raw=true "Game won")
-![Alt text](Mastermind%20img/Mastermind%20color%20menu.png.jpg?raw=true "Color menu")
+![Game won](github.com/JuliusCaesar02/mastermind/blob/master/Mastermind%20img/Mastermind%20won%20game.png?raw=true "Game won")
+
+![Color menu](github.com/JuliusCaesar02/mastermind/blob/master/Mastermind%20img/Mastermind%20color%20menu.png)?raw=true "Color menu")
 
 4 Different difficulties
-![Alt text](Mastermind%20img/Mastermind%difficulty%20menu.png.jpg?raw=true "Difficulty menu")
+![Difficulty menu](github.com/JuliusCaesar02/mastermind/blob/master/Mastermind%20img/Mastermind%20difficulty%20menu.png.jpg?raw=true "Difficulty menu")
