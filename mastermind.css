@@ -307,11 +307,11 @@ div[data-hint="1"]{
 #difficulty-popup .item:hover{
     transform: scale(1.2);
 }
-#difficulty-popup .item h1{
+#difficulty-popup h1{
     font-size: 2rem;
 }
 
-#difficulty-popup .item p{
+#difficulty-popup p{
     text-align: center;
     padding: 0 15px;
 }
@@ -343,7 +343,7 @@ div[data-hint="1"]{
 }
 
 #end-game-popup > div{
-    padding: 5%;
+    padding: 3%;
     background-color: rgb(133, 133, 192);
     text-align: center;
 }
@@ -357,4 +357,33 @@ div[data-hint="1"]{
 }
 #end-game-popup div.item > div:hover{
     background-color: #4a4a4a;
+}
+
+@media (min-width:320px)  {
+    body{
+        height: 100dvh;
+    }
+    #logo{
+        font-size: 2rem;
+    }
+    p{
+        font-size: .7rem;
+    }
+    #difficulty-popup > div{
+        grid-template: repeat(4, 1fr) / repeat(1, 1fr);
+        gap: 20px;
+        height: fit-content;
+        margin: 0 7%;
+    }
+    #difficulty-popup .item h1{
+        font-size: 1rem;
+    }
+    #difficulty-popup .item div{
+        width: fit-content;
+        padding: 2px;
+    }
+    #difficulty-popup .item div > div {
+        height: 25px;
+        width: 25px;
+    }
 }

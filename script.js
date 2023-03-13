@@ -227,8 +227,6 @@ function highlightsRow(){
  */ 
 function addListeners(elements){
     elements.forEach(item => {
-        item.addEventListener("wheel", showColorMenu);
-
         item.addEventListener("click", buttonClicked);
         item.addEventListener("mouseenter", showColorMenu);
         item.addEventListener("mouseleave", hideColorMenu);
@@ -260,6 +258,14 @@ function showColorMenu(evt){
             menuItemDiv.dataset.color = possibleColors[i];
             menuItemDiv.addEventListener("click", menuItemClicked);
             menuDiv.appendChild(menuItemDiv);
+        }
+        //Checks that the menu is not uside the screen and recenters it if needed
+        let position = menuDiv.getBoundingClientRect();
+        if(position.x < 0) {
+            menuDiv.style.right = 147 + position.x +"px";
+        }
+        if(position.right > document.documentElement.clientWidth){
+            menuDiv.style.right = position.right - document.documentElement.clientWidth + 147 +"px";
         }
     }, 300);
 }
