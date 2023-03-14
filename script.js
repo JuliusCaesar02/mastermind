@@ -45,7 +45,7 @@ function resetBoard(){
         item.removeAttribute("data-hint");
     });
 
-    elements = document.querySelectorAll(".grid .selected-row");
+    elements = document.querySelectorAll("#grid .selected-row");
     console.log(elements)
     for (let i = 0; i < elements.length; i++) {
         elements[i].classList.remove("selected-row");
@@ -227,6 +227,8 @@ function highlightsRow(){
  */ 
 function addListeners(elements){
     elements.forEach(item => {
+        item.addEventListener("wheel", showColorMenu);
+
         item.addEventListener("click", buttonClicked);
         item.addEventListener("mouseenter", showColorMenu);
         item.addEventListener("mouseleave", hideColorMenu);
